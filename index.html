@@ -9,148 +9,479 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Poppins:wght@600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --primary: #3b82f6;
+            --primary-dark: #2563eb;
+            --primary-light: #60a5fa;
+            --success: #10b981;
+            --success-light: #34d399;
+            --error: #ef4444;
+            --bg-dark: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --border: #334155;
+            --border-light: #475569;
+            --text-primary: #f1f5f9;
+            --text-secondary: #cbd5e1;
+            --text-muted: #94a3b8;
+        }
+
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0B1120;
-            background-image: 
-                radial-gradient(at 10% 20%, hsla(210, 40%, 15%, 0.4) 0px, transparent 50%),
-                radial-gradient(at 80% 90%, hsla(330, 40%, 15%, 0.3) 0px, transparent 50%),
-                radial-gradient(at 50% 50%, hsla(260, 40%, 10%, 0.2) 0px, transparent 50%);
+            background-color: var(--bg-dark);
+            background-image:
+                radial-gradient(at 10% 20%, rgba(59, 130, 246, 0.05) 0px, transparent 50%),
+                radial-gradient(at 80% 90%, rgba(99, 102, 241, 0.04) 0px, transparent 50%);
+            min-height: 100vh;
         }
+
         h1, h2, h3 {
             font-family: 'Poppins', sans-serif;
+            letter-spacing: -0.02em;
         }
+
+        .header-icon {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.3);
+        }
+
+        .tab-container {
+            position: relative;
+        }
+
+        .tab-button {
+            background: rgba(15, 23, 42, 0.4);
+            border: 1px solid var(--border);
+            border-bottom: 1px solid var(--border-light);
+            border-radius: 10px 10px 0 0;
+            position: relative;
+            z-index: 1;
+            font-weight: 600;
+            font-size: 0.9rem;
+            letter-spacing: -0.01em;
+            color: var(--text-muted);
+            transition: all 0.2s ease;
+        }
+
+        .tab-button:hover:not(.tab-active) {
+            background: var(--bg-card-hover);
+            border-color: var(--border-light);
+            color: var(--text-secondary);
+        }
+
         .tab-active {
-            color: #f59e0b; /* Amber 500 */
-            border-color: #f59e0b;
+            color: #ffffff !important;
+            background: var(--bg-card) !important;
+            border: 2px solid var(--primary) !important;
+            border-bottom: 2px solid var(--bg-card) !important;
+            z-index: 10;
+            box-shadow: 0 -4px 16px rgba(59, 130, 246, 0.25), 0 0 0 1px rgba(59, 130, 246, 0.1);
+            font-weight: 700;
         }
+
+        .tab-content {
+            border-top-left-radius: 0 !important;
+            position: relative;
+            z-index: 5;
+        }
+
         .card-main {
-            background-color: rgba(23, 29, 43, 0.6); /* Semi-transparent background */
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
+            background-color: var(--bg-card);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--border-light);
+            box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
         }
+
         .copy-button {
-             background: linear-gradient(to right, #f59e0b, #fbbf24); /* Amber gradient */
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            transition: all 0.2s ease;
+            font-weight: 600;
+            box-shadow: 0 2px 8px rgba(59, 130, 246, 0.3);
+        }
+
+        .copy-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(59, 130, 246, 0.4);
+        }
+
+        .copy-button:active {
+            transform: scale(0.98);
+        }
+
+        .copy-button.copied {
+            background: linear-gradient(135deg, var(--success) 0%, var(--success-light) 100%);
+            box-shadow: 0 2px 8px rgba(16, 185, 129, 0.3);
+        }
+
+        .input-field {
+            background: rgba(15, 23, 42, 0.6);
+            border: 2px solid var(--border);
+            transition: all 0.2s ease;
+        }
+
+        .input-field:focus {
+            background: rgba(15, 23, 42, 0.8);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+        }
+
+        .input-valid {
+            border-color: var(--success) !important;
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.1) !important;
+        }
+
+        .input-invalid {
+            border-color: var(--error) !important;
+            box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1) !important;
+        }
+
+        .tooltip {
+            position: relative;
+            display: inline-block;
+            cursor: help;
+        }
+
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 260px;
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            color: var(--text-secondary);
+            text-align: left;
+            border-radius: 10px;
+            padding: 12px 14px;
+            position: absolute;
+            z-index: 100;
+            bottom: 140%;
+            left: 50%;
+            margin-left: -130px;
+            opacity: 0;
+            transition: all 0.3s ease;
+            font-size: 0.82rem;
+            line-height: 1.5;
+            border: 1px solid var(--border-light);
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+        }
+
+        .tooltip .tooltiptext::after {
+            content: "";
+            position: absolute;
+            top: 100%;
+            left: 50%;
+            margin-left: -6px;
+            border-width: 6px;
+            border-style: solid;
+            border-color: #1e293b transparent transparent transparent;
+        }
+
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+            bottom: 125%;
+        }
+
+        .example-output {
+            background: linear-gradient(135deg, rgba(59, 130, 246, 0.08) 0%, rgba(99, 102, 241, 0.06) 100%);
+            border-left: 3px solid var(--primary);
+            border-radius: 8px;
+        }
+
+        .formula-container {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+        }
+
+        .section-divider {
+            border-color: var(--border);
+        }
+
+        label {
+            font-weight: 600;
+            color: var(--text-secondary);
+            letter-spacing: -0.01em;
+        }
+
+        select {
+            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%236b7280' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e");
+            background-position: right 0.5rem center;
+            background-repeat: no-repeat;
+            background-size: 1.5em 1.5em;
+            padding-right: 2.5rem;
+        }
+
+        kbd {
+            font-family: 'SF Mono', 'Monaco', 'Cascadia Code', 'Courier New', monospace;
+            font-weight: 600;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-8px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .fade-in {
+            animation: slideIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
     </style>
 </head>
 <body class="text-gray-300 antialiased">
 
-    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-4xl">
-        <header class="text-center mb-10">
-            <div class="inline-block bg-gray-800 p-3 rounded-xl mb-4 border border-gray-700">
-                <img src="timecalcexcel.svg" alt="Time Calculation Icon" class="w-8 h-8">
+    <div class="container mx-auto p-4 sm:p-6 md:p-8 max-w-5xl">
+        <header class="text-center mb-12">
+            <div class="inline-flex items-center justify-center header-icon p-4 rounded-2xl mb-6 border border-blue-500/20">
+                <img src="timecalcexcel.svg" alt="Time Calculation Icon" class="w-10 h-10">
             </div>
-            <h1 class="text-4xl sm:text-5xl font-bold text-white tracking-tight">Excel Formula Generator</h1>
-            <p class="mt-4 text-md sm:text-lg text-gray-400 max-w-2xl mx-auto">ECVCs can use this app to easily create formulas to calculate time elapsed, ages and age categories in Excel.</p>
+            <h1 class="text-4xl sm:text-5xl md:text-6xl font-bold text-white tracking-tight mb-4">Excel Formula Generator</h1>
+            <p class="mt-3 text-base sm:text-lg text-slate-400 max-w-2xl mx-auto leading-relaxed">Generate accurate Excel formulas tracking, age and age category.</p>
         </header>
 
-        <div class="card-main rounded-2xl shadow-2xl p-6 sm:p-8">
-            <!-- Tabs -->
-            <div class="flex border-b border-gray-700 mb-8">
-                <button id="tab-report" class="flex-1 pb-3 px-1 text-center font-semibold text-gray-400 border-b-2 border-transparent hover:text-white transition-colors duration-200 ease-in-out focus:outline-none tab-active" onclick="switchTab('report')">
-                    Time Since Report/FSP
+        <!-- Tabs -->
+        <div class="tab-container">
+            <div class="flex gap-1 px-2">
+                <button id="tab-report" class="tab-button flex-1 py-3 px-4 text-center font-semibold text-gray-400 hover:text-white hover:bg-gray-700/40 transition-all duration-200 ease-in-out focus:outline-none tab-active" onclick="switchTab('report')">
+                    <span class="hidden sm:inline">Time Since Report/FSP</span>
+                    <span class="sm:hidden">Time Since</span>
                 </button>
-                <button id="tab-birthday" class="flex-1 pb-3 px-1 text-center font-semibold text-gray-400 border-b-2 border-transparent hover:text-white transition-colors duration-200 ease-in-out focus:outline-none" onclick="switchTab('birthday')">
-                    Calculate Age
+                <button id="tab-birthday" class="tab-button flex-1 py-3 px-4 text-center font-semibold text-gray-400 hover:text-white hover:bg-gray-700/40 transition-all duration-200 ease-in-out focus:outline-none" onclick="switchTab('birthday')">
+                    <span class="hidden sm:inline">Calculate Age</span>
+                    <span class="sm:hidden">Age</span>
                 </button>
-                <button id="tab-category" class="flex-1 pb-3 px-1 text-center font-semibold text-gray-400 border-b-2 border-transparent hover:text-white transition-colors duration-200 ease-in-out focus:outline-none" onclick="switchTab('category')">
-                    Age Category
+                <button id="tab-category" class="tab-button flex-1 py-3 px-4 text-center font-semibold text-gray-400 hover:text-white hover:bg-gray-700/40 transition-all duration-200 ease-in-out focus:outline-none" onclick="switchTab('category')">
+                    <span class="hidden sm:inline">Age Category</span>
+                    <span class="sm:hidden">Category</span>
                 </button>
             </div>
 
+            <div class="card-main tab-content rounded-2xl shadow-2xl p-6 sm:p-8">
+            <!-- Tab Content -->
+
             <!-- Report Calculator -->
-            <div id="calculator-report">
+            <div id="calculator-report" class="fade-in">
                 <h2 class="text-2xl font-bold mb-2 text-white">Time Since Last Report or FSP</h2>
-                <p class="text-gray-400 mb-8">Calculate the time passed since a report or FSP date.</p>
+                <p class="text-slate-400 mb-8 leading-relaxed">Calculate the time passed since a report or FSP date.</p>
                 <div class="space-y-6">
                     <div>
-                        <label for="report-cell" class="block text-sm font-medium text-gray-300 mb-2">1. Which cell has the date?</label>
-                        <input type="text" id="report-cell" value="A2" class="w-full px-4 py-2 bg-gray-900/50 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition">
+                        <label for="report-cell" class="block text-sm font-medium text-gray-300 mb-2">
+                            1. Which cell has the date?
+                            <span class="tooltip ml-1">
+                                <svg class="inline w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="tooltiptext">Enter the Excel cell reference (e.g., A2, B5) that contains your report or FSP date.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="report-cell" value="A2" placeholder="e.g., A2" class="input-field w-full px-4 py-3 text-white rounded-lg outline-none transition">
+                        <p id="report-cell-hint" class="text-xs text-slate-500 mt-2">Valid format: Letter + Number (e.g., A2, B10, AA5)</p>
                     </div>
                     <div>
-                        <label for="report-unit" class="block text-sm font-medium text-gray-300 mb-2">2. What unit of time do you want to measure?</label>
-                        <select id="report-unit" class="w-full px-4 py-2 bg-gray-900/50 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition">
-                            <option value="d">Days</option><option value="w">Weeks</option><option value="m">Months</option><option value="y">Years</option>
+                        <label for="report-unit" class="block text-sm font-medium text-gray-300 mb-2">
+                            2. What unit of time do you want to measure?
+                            <span class="tooltip ml-1">
+                                <svg class="inline w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="tooltiptext">Choose how you want to display the time elapsed: days, weeks, months, or years.</span>
+                            </span>
+                        </label>
+                        <select id="report-unit" class="input-field w-full px-4 py-3 text-white rounded-lg outline-none transition appearance-none">
+                            <option value="d">Days</option>
+                            <option value="w">Weeks</option>
+                            <option value="m">Months</option>
+                            <option value="y">Years</option>
                         </select>
                     </div>
+                    <div class="example-output p-4">
+                        <h4 class="text-sm font-semibold text-blue-400 mb-1.5 flex items-center">
+                            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                            Example Output
+                        </h4>
+                        <p id="report-example" class="text-slate-300 text-sm">If the report date was 90 days ago, the result will be: <span class="font-semibold text-white">90</span></p>
+                    </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-white mb-2">3. Your Excel Formula</h3>
-                        <div class="mt-2 p-4 bg-gray-900 rounded-lg flex items-center justify-between border border-gray-700">
-                            <code id="report-formula" class="text-cyan-300 font-mono text-sm sm:text-base break-all"></code>
-                            <button onclick="copyToClipboard('report-formula', 'report-copy-feedback')" class="copy-button ml-4 px-4 py-2 text-gray-900 font-semibold rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-amber-500 transition-opacity duration-200 flex items-center space-x-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                <span>Copy</span>
-                            </button>
+                        <h3 class="text-lg font-semibold text-white mb-3">3. Your Excel Formula</h3>
+                        <div class="formula-container p-4">
+                            <div class="flex items-center justify-between">
+                                <code id="report-formula" class="text-cyan-300 font-mono text-sm sm:text-base break-all flex-1 mr-4"></code>
+                                <button id="report-copy-btn" onclick="copyToClipboard('report-formula', 'report-copy-feedback', 'report-copy-btn')" class="copy-button px-5 py-2.5 text-white font-semibold rounded-lg outline-none flex items-center space-x-2 whitespace-nowrap">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                    <span>Copy</span>
+                                </button>
+                            </div>
+                            <div id="report-copy-feedback" class="text-green-500 text-sm mt-2 opacity-0 transition-opacity flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                Copied to clipboard!
+                            </div>
                         </div>
-                         <span id="report-copy-feedback" class="text-green-500 text-sm mt-2 opacity-0 transition-opacity">Copied!</span>
+                        <p class="text-xs text-slate-500 mt-3">Press Ctrl+V (Windows) or Cmd+V (Mac) in Excel to paste</p>
+                    </div>
+                    <div class="!mt-8 pt-6 border-t section-divider">
+                        <h3 class="text-lg font-semibold text-white mb-4">How to Use in Excel</h3>
+                        <ol class="list-decimal list-inside space-y-2.5 text-slate-400 text-sm leading-relaxed">
+                            <li>Click the Copy button above to copy the formula</li>
+                            <li>In Excel, click on the cell where you want the result to appear</li>
+                            <li>Paste the formula (Ctrl+V or Cmd+V) into the formula bar</li>
+                            <li>Make sure the cell reference matches your date column</li>
+                            <li>Press <span class="font-semibold text-gray-200">Enter</span> to see the result</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
             <!-- Birthday Calculator -->
-            <div id="calculator-birthday" class="hidden">
+            <div id="calculator-birthday" class="hidden fade-in">
                  <h2 class="text-2xl font-bold mb-2 text-white">Calculate Age</h2>
-                <p class="text-gray-400 mb-8">Calculate the current age in your desired format.</p>
+                <p class="text-slate-400 mb-8 leading-relaxed">Calculate the current age in your desired format.</p>
                 <div class="space-y-6">
                     <div>
-                        <label for="birthday-cell" class="block text-sm font-medium text-gray-300 mb-2">1. Which cell has the birth date?</label>
-                        <input type="text" id="birthday-cell" value="B2" class="w-full px-4 py-2 bg-gray-900/50 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition">
+                        <label for="birthday-cell" class="block text-sm font-medium text-gray-300 mb-2">
+                            1. Which cell has the birth date?
+                            <span class="tooltip ml-1">
+                                <svg class="inline w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="tooltiptext">Enter the Excel cell reference containing the birth date you want to calculate age from.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="birthday-cell" value="B2" placeholder="e.g., B2" class="input-field w-full px-4 py-3 text-white rounded-lg outline-none transition">
+                        <p id="birthday-cell-hint" class="text-xs text-slate-500 mt-2">Valid format: Letter + Number (e.g., B2, C10, AB5)</p>
                     </div>
                      <div>
-                        <label for="age-format" class="block text-sm font-medium text-gray-300 mb-2">2. Choose the age format</label>
-                        <select id="age-format" class="w-full px-4 py-2 bg-gray-900/50 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition">
-                            <option value="ym">Years, Months</option><option value="wd">Weeks, Days</option>
+                        <label for="age-format" class="block text-sm font-medium text-gray-300 mb-2">
+                            2. Choose the age format
+                            <span class="tooltip ml-1">
+                                <svg class="inline w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="tooltiptext">Years & Months for older children, Weeks & Days for infants and toddlers.</span>
+                            </span>
+                        </label>
+                        <select id="age-format" class="input-field w-full px-4 py-3 text-white rounded-lg outline-none transition appearance-none">
+                            <option value="ym">Years, Months (e.g., 3y 6m)</option>
+                            <option value="wd">Weeks, Days (e.g., 52w 3d)</option>
                         </select>
                     </div>
+                    <div class="example-output p-4">
+                        <h4 class="text-sm font-semibold text-blue-400 mb-1.5 flex items-center">
+                            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                            Example Output
+                        </h4>
+                        <p id="birthday-example" class="text-slate-300 text-sm">A child born 3 years and 6 months ago will show: <span class="font-semibold text-white">3y 6m</span></p>
+                    </div>
                     <div>
-                        <h3 class="text-lg font-semibold text-white mb-2">3. Your Excel Formula</h3>
-                        <div class="mt-2 p-4 bg-gray-900 rounded-lg flex items-center justify-between border border-gray-700">
-                            <code id="birthday-formula" class="text-cyan-300 font-mono text-sm sm:text-base break-all"></code>
-                            <button onclick="copyToClipboard('birthday-formula', 'birthday-copy-feedback')" class="copy-button ml-4 px-4 py-2 text-gray-900 font-semibold rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-amber-500 transition-opacity duration-200 flex items-center space-x-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                <span>Copy</span>
-                            </button>
+                        <h3 class="text-lg font-semibold text-white mb-3">3. Your Excel Formula</h3>
+                        <div class="formula-container p-4">
+                            <div class="flex items-center justify-between">
+                                <code id="birthday-formula" class="text-cyan-300 font-mono text-sm sm:text-base break-all flex-1 mr-4"></code>
+                                <button id="birthday-copy-btn" onclick="copyToClipboard('birthday-formula', 'birthday-copy-feedback', 'birthday-copy-btn')" class="copy-button px-5 py-2.5 text-white font-semibold rounded-lg outline-none flex items-center space-x-2 whitespace-nowrap">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                    <span>Copy</span>
+                                </button>
+                            </div>
+                            <div id="birthday-copy-feedback" class="text-green-500 text-sm mt-2 opacity-0 transition-opacity flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                Copied to clipboard!
+                            </div>
                         </div>
-                        <span id="birthday-copy-feedback" class="text-green-500 text-sm mt-2 opacity-0 transition-opacity">Copied!</span>
+                        <p class="text-xs text-slate-500 mt-3">Press Ctrl+V (Windows) or Cmd+V (Mac) in Excel to paste</p>
+                    </div>
+                    <div class="!mt-8 pt-6 border-t section-divider">
+                        <h3 class="text-lg font-semibold text-white mb-4">How to Use in Excel</h3>
+                        <ol class="list-decimal list-inside space-y-2.5 text-slate-400 text-sm leading-relaxed">
+                            <li>Click the Copy button above to copy the formula</li>
+                            <li>In Excel, click on the cell where you want the age to appear</li>
+                            <li>Paste the formula (Ctrl+V or Cmd+V) into the formula bar</li>
+                            <li>Verify the cell reference matches your birth date column</li>
+                            <li>Press <span class="font-semibold text-gray-200">Enter</span> to calculate the age</li>
+                        </ol>
                     </div>
                 </div>
             </div>
 
             <!-- Age Category Calculator -->
-            <div id="calculator-category" class="hidden">
+            <div id="calculator-category" class="hidden fade-in">
                  <h2 class="text-2xl font-bold mb-2 text-white">Determine Age Category</h2>
-                <p class="text-gray-400 mb-8">Automatically categorize an individual based on their age in months.</p>
+                <p class="text-slate-400 mb-8 leading-relaxed">Automatically categorize an individual based on their age in months.</p>
                 <div class="space-y-6">
                     <div>
-                        <label for="category-cell" class="block text-sm font-medium text-gray-300 mb-2">1. Which cell has the birth date?</label>
-                        <input type="text" id="category-cell" value="C2" class="w-full px-4 py-2 bg-gray-900/50 border border-gray-700 text-white rounded-lg focus:ring-2 focus:ring-amber-500 focus:border-amber-500 transition">
+                        <label for="category-cell" class="block text-sm font-medium text-gray-300 mb-2">
+                            1. Which cell has the birth date?
+                            <span class="tooltip ml-1">
+                                <svg class="inline w-4 h-4 text-gray-500" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                                </svg>
+                                <span class="tooltiptext">Enter the Excel cell reference containing the birth date to determine the age category.</span>
+                            </span>
+                        </label>
+                        <input type="text" id="category-cell" value="C2" placeholder="e.g., C2" class="input-field w-full px-4 py-3 text-white rounded-lg outline-none transition">
+                        <p id="category-cell-hint" class="text-xs text-slate-500 mt-2">Valid format: Letter + Number (e.g., C2, D10, AC5)</p>
+                    </div>
+                    <div class="example-output p-4">
+                        <h4 class="text-sm font-semibold text-blue-400 mb-3 flex items-center">
+                            <svg class="w-4 h-4 mr-1.5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                            </svg>
+                            Age Categories
+                        </h4>
+                        <div class="grid grid-cols-2 gap-2.5 text-xs text-slate-300">
+                            <div><span class="font-semibold text-white">0-17 months:</span> Infant</div>
+                            <div><span class="font-semibold text-white">18-30 months:</span> Toddler</div>
+                            <div><span class="font-semibold text-white">31-43 months:</span> Preschool</div>
+                            <div><span class="font-semibold text-white">44-55 months:</span> JK</div>
+                            <div><span class="font-semibold text-white">56-71 months:</span> SK</div>
+                            <div><span class="font-semibold text-white">72+ months:</span> Aged Out</div>
+                        </div>
                     </div>
                     <div>
                         <h3 class="text-lg font-semibold text-white mb-2">2. Your Excel Formula</h3>
-                        <div class="mt-2 p-4 bg-gray-900 rounded-lg flex items-center justify-between border border-gray-700">
-                            <code id="category-formula" class="text-cyan-300 font-mono text-sm sm:text-base break-all"></code>
-                            <button onclick="copyToClipboard('category-formula', 'category-copy-feedback')" class="copy-button ml-4 px-4 py-2 text-gray-900 font-semibold rounded-lg hover:opacity-90 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-800 focus:ring-amber-500 transition-opacity duration-200 flex items-center space-x-2">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
-                                <span>Copy</span>
-                            </button>
+                        <div class="mt-2 p-4 bg-gray-900 rounded-lg border border-gray-700">
+                            <div class="flex items-center justify-between">
+                                <code id="category-formula" class="text-cyan-300 font-mono text-sm sm:text-base break-all flex-1 mr-4"></code>
+                                <button id="category-copy-btn" onclick="copyToClipboard('category-formula', 'category-copy-feedback', 'category-copy-btn')" class="copy-button px-5 py-2.5 text-white font-semibold rounded-lg outline-none flex items-center space-x-2 whitespace-nowrap">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+                                    <span>Copy</span>
+                                </button>
+                            </div>
+                            <div id="category-copy-feedback" class="text-green-500 text-sm mt-2 opacity-0 transition-opacity flex items-center">
+                                <svg class="w-4 h-4 mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                                </svg>
+                                Copied to clipboard!
+                            </div>
                         </div>
-                        <span id="category-copy-feedback" class="text-green-500 text-sm mt-2 opacity-0 transition-opacity">Copied!</span>
+                        <p class="text-xs text-slate-500 mt-3">Press Ctrl+V (Windows) or Cmd+V (Mac) in Excel to paste</p>
                     </div>
-                     <div class="!mt-8 pt-6 border-t border-gray-700">
-                        <h3 class="text-lg font-semibold text-white">How to Use in Excel</h3>
-                        <ol class="list-decimal list-inside mt-2 space-y-2 text-gray-400">
-                            <li>Click on an empty cell in your spreadsheet.</li>
-                            <li>Copy the generated formula and paste it into the formula bar.</li>
-                            <li>Ensure the cell in the formula (e.g., <span class="font-mono bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded">C2</span>) matches the cell with the birth date.</li>
-                            <li>Press <span class="font-semibold text-gray-200">Enter</span>.</li>
-                            <li>If you see "Invalid Date", the source cell is empty or the date is not formatted correctly.</li>
+                     <div class="!mt-8 pt-6 border-t section-divider">
+                        <h3 class="text-lg font-semibold text-white mb-4">How to Use in Excel</h3>
+                        <ol class="list-decimal list-inside space-y-2.5 text-slate-400 text-sm leading-relaxed">
+                            <li>Click the Copy button above to copy the formula</li>
+                            <li>In Excel, click on the cell where you want the category to appear</li>
+                            <li>Paste the formula (Ctrl+V or Cmd+V) into the formula bar</li>
+                            <li>Verify the cell reference (e.g., <span class="font-mono bg-gray-700 text-gray-300 px-1.5 py-0.5 rounded">C2</span>) matches your birth date column</li>
+                            <li>Press <span class="font-semibold text-gray-200">Enter</span> to see the category</li>
+                            <li>If you see "Invalid Date", check that the source cell contains a valid date</li>
                         </ol>
                     </div>
                 </div>
             </div>
+            </div>
         </div>
+
     </div>
 
     <script>
@@ -174,31 +505,72 @@
             category: document.getElementById('calculator-category')
         };
 
+        // --- Validation ---
+        function isValidCellReference(cell) {
+            // Matches patterns like A1, AB12, AAZ999
+            return /^[A-Za-z]+[0-9]+$/.test(cell.trim());
+        }
+
+        function validateInput(input) {
+            const value = input.value.trim();
+            if (value === '') {
+                input.classList.remove('input-valid', 'input-invalid');
+                return true;
+            }
+
+            if (isValidCellReference(value)) {
+                input.classList.remove('input-invalid');
+                input.classList.add('input-valid');
+                return true;
+            } else {
+                input.classList.remove('input-valid');
+                input.classList.add('input-invalid');
+                return false;
+            }
+        }
+
         // --- Functions ---
         function updateReportFormula() {
+            validateInput(reportCellInput);
             const cell = reportCellInput.value.trim() || 'A2';
             const unit = reportUnitSelect.value;
-            let coreFormula = unit === 'w' 
-                ? `INT((TODAY()-${cell})/7)` 
+            let coreFormula = unit === 'w'
+                ? `INT((TODAY()-${cell})/7)`
                 : `DATEDIF(${cell}, TODAY(), "${unit}")`;
             reportFormulaCode.textContent = `=IFERROR(${coreFormula}, "Invalid Date")`;
+
+            // Update example
+            const examples = {d: '90 days', w: '13 weeks', m: '3 months', y: '2 years'};
+            const unitNames = {d: 'days', w: 'weeks', m: 'months', y: 'years'};
+            const exampleValues = {d: '90', w: '13', m: '3', y: '2'};
+            document.getElementById('report-example').innerHTML =
+                `If the report date was ${examples[unit]} ago, the result will be: <span class="font-semibold text-white">${exampleValues[unit]}</span>`;
         }
 
         function updateBirthdayFormula() {
+            validateInput(birthdayCellInput);
             const cell = birthdayCellInput.value.trim() || 'B2';
             const format = ageFormatSelect.value;
             let coreFormula = format === 'ym'
                 ? `DATEDIF(${cell}, TODAY(), "y") & "y " & DATEDIF(${cell}, TODAY(), "ym") & "m"`
                 : `INT((TODAY()-${cell})/7) & "w " & MOD(TODAY()-${cell}, 7) & "d"`;
             birthdayFormulaCode.textContent = `=IFERROR(${coreFormula}, "Invalid Date")`;
+
+            // Update example
+            const examples = {
+                ym: 'A child born 3 years and 6 months ago will show: <span class="font-semibold text-white">3y 6m</span>',
+                wd: 'A baby born 52 weeks and 3 days ago will show: <span class="font-semibold text-white">52w 3d</span>'
+            };
+            document.getElementById('birthday-example').innerHTML = examples[format];
         }
 
         function updateAgeCategoryFormula() {
+            validateInput(categoryCellInput);
             const cell = categoryCellInput.value.trim() || 'C2';
             const coreFormula = `IF(DATEDIF(${cell},TODAY(),"m")<=17,"Infant",IF(DATEDIF(${cell},TODAY(),"m")<=30,"Toddler",IF(DATEDIF(${cell},TODAY(),"m")<=43,"Preschool",IF(DATEDIF(${cell},TODAY(),"m")<=55,"JK",IF(DATEDIF(${cell},TODAY(),"m")<=71,"SK","Aged Out")))))`;
             categoryFormulaCode.textContent = `=IFERROR(${coreFormula}, "Invalid Date")`;
         }
-        
+
         function switchTab(tabName) {
             Object.values(calculators).forEach(calc => calc.classList.add('hidden'));
             Object.values(tabs).forEach(tab => tab.classList.remove('tab-active'));
@@ -206,22 +578,96 @@
             tabs[tabName].classList.add('tab-active');
         }
 
-        function copyToClipboard(elementId, feedbackId) {
+        function copyToClipboard(elementId, feedbackId, buttonId) {
             const formulaText = document.getElementById(elementId).textContent;
             const feedbackEl = document.getElementById(feedbackId);
+            const buttonEl = buttonId ? document.getElementById(buttonId) : null;
+
+            // Modern clipboard API
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(formulaText).then(() => {
+                    showCopySuccess(feedbackEl, buttonEl);
+                }).catch(() => {
+                    fallbackCopy(formulaText, feedbackEl, buttonEl);
+                });
+            } else {
+                fallbackCopy(formulaText, feedbackEl, buttonEl);
+            }
+        }
+
+        function fallbackCopy(text, feedbackEl, buttonEl) {
             const textArea = document.createElement('textarea');
-            textArea.value = formulaText;
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
             document.body.appendChild(textArea);
             textArea.select();
             try {
                 document.execCommand('copy');
-                feedbackEl.style.opacity = '1';
-                setTimeout(() => { feedbackEl.style.opacity = '0'; }, 2000);
+                showCopySuccess(feedbackEl, buttonEl);
             } catch (err) {
                 console.error('Failed to copy text: ', err);
+                feedbackEl.textContent = 'Failed to copy';
+                feedbackEl.style.opacity = '1';
+                setTimeout(() => { feedbackEl.style.opacity = '0'; }, 2000);
             }
             document.body.removeChild(textArea);
         }
+
+        function showCopySuccess(feedbackEl, buttonEl) {
+            // Show feedback
+            feedbackEl.style.opacity = '1';
+
+            // Change button appearance
+            if (buttonEl) {
+                buttonEl.classList.add('copied');
+                const buttonText = buttonEl.querySelector('span');
+                const originalText = buttonText.textContent;
+                buttonText.textContent = 'Copied!';
+
+                setTimeout(() => {
+                    buttonEl.classList.remove('copied');
+                    buttonText.textContent = originalText;
+                }, 2000);
+            }
+
+            // Hide feedback
+            setTimeout(() => {
+                feedbackEl.style.opacity = '0';
+            }, 3000);
+        }
+
+        // --- Keyboard Shortcuts ---
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + Enter to copy formula in active tab
+            if ((e.ctrlKey || e.metaKey) && e.key === 'Enter') {
+                e.preventDefault();
+                const activeCalc = Object.keys(calculators).find(
+                    key => !calculators[key].classList.contains('hidden')
+                );
+                if (activeCalc === 'report') {
+                    copyToClipboard('report-formula', 'report-copy-feedback', 'report-copy-btn');
+                } else if (activeCalc === 'birthday') {
+                    copyToClipboard('birthday-formula', 'birthday-copy-feedback', 'birthday-copy-btn');
+                } else if (activeCalc === 'category') {
+                    copyToClipboard('category-formula', 'category-copy-feedback', 'category-copy-btn');
+                }
+            }
+
+            // Alt + 1/2/3 to switch tabs
+            if (e.altKey) {
+                if (e.key === '1') {
+                    e.preventDefault();
+                    switchTab('report');
+                } else if (e.key === '2') {
+                    e.preventDefault();
+                    switchTab('birthday');
+                } else if (e.key === '3') {
+                    e.preventDefault();
+                    switchTab('category');
+                }
+            }
+        });
 
         // --- Event Listeners ---
         reportCellInput.addEventListener('input', updateReportFormula);
